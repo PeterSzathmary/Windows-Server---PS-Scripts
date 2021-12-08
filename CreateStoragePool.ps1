@@ -1,2 +1,2 @@
 $physicalDisks = (Get-PhysicalDisk -CanPool $True)
-New-StoragePool -FriendlyName MyCompanyDataPool -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks $physicalDisks -ResiliencySettingNameDefault Mirror -ProvisioningTypeDefault Thin -Verbose
+New-StoragePool -FriendlyName StoragePool1 -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks $physicalDisks
