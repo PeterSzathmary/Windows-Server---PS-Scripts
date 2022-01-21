@@ -1,2 +1,3 @@
 $computerName = hostname.exe
-Enable-ADOptionalFeature -Identity "Recycle Bin Feature" -Scope ForestOrConfigurationSet -Target "windows.lab" -Server $computerName -Confirm:$false
+$domain = Read-Host "Your domain"
+Enable-ADOptionalFeature -Identity "Recycle Bin Feature" -Scope ForestOrConfigurationSet -Target $domain -Server $computerName -Confirm:$false
