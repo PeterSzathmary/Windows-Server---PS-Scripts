@@ -30,6 +30,8 @@ function Get-Info
                 New-Item -Path $OutPath -ItemType File
             }
         }
+
+        Clear-Host
     }
 
     Process
@@ -62,11 +64,11 @@ function Get-Info
                 $output += $BIOSInfo | ConvertTo-Json
                 $output += "`n"
 
-                Clear-Host
+                #Clear-Host
 
                 return $output
             } else {
-                Clear-Host
+                #Clear-Host
                 Write-Host "OS Info" -ForegroundColor Green
                 $OSInfo | Out-Host
                 Write-Host "HW Info" -ForegroundColor Green
