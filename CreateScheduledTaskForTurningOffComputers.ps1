@@ -7,9 +7,9 @@
 #PS C:\> Register-ScheduledTask 'baz' -InputObject $task
 
 $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "C:\Users\Administrator\Desktop\Windows-Server---PS-Scripts\TurnOffAllComputersInDomain.ps1"
-$trigger = New-ScheduledTaskTrigger -Daily -At "5:26 PM"
+$trigger = New-ScheduledTaskTrigger -Daily -At "7:23 PM"
 $principal = New-ScheduledTaskPrincipal -UserId "$($env:USERDNSDOMAIN)\$($env:USERNAME)" -RunLevel Highest
 $settings = New-ScheduledTaskSettingsSet -WakeToRun
 $task = New-ScheduledTask -Action $action -Principal $principal -Trigger $trigger -Settings $settings
 
-Register-ScheduledTask "Shutdown all computers in domain3" -InputObject $task
+Register-ScheduledTask "Shutdown all computers in domain5" -InputObject $task
