@@ -8,3 +8,8 @@ Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $installer
 $git_install_inf = "<install inf file>"
 $install_args = "/SP- /VERYSILENT /SUPPRESSMSGBOXES /NOCANCEL /NORESTART /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /LOADINF=""$git_install_inf"""
 Start-Process -FilePath $installer -ArgumentList $install_args -Wait
+
+Set-ExecutionPolicy -Scope LocalMachine -ExecutionPolicy RemoteSigned -Force
+Install-Module posh-git -Scope CurrentUser -Force
+Import-Module posh-git
+Add-PoshGitToProfile -AllHosts
