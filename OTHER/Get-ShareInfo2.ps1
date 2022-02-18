@@ -30,7 +30,7 @@ function Get-ShareInfo2
         $FilePath = "C:\Users\Administrator\Desktop\{0}.txt" -f $MyInvocation.MyCommand
     )
  
-    # Check connections to computers.
+    # Check connections to computers and create a file.
     Begin {
         # If we don't want to output to the console.
         if (-not $ConsoleOutput) {
@@ -48,6 +48,7 @@ function Get-ShareInfo2
             }
         }
 
+        # Clear the screen.
         Clear-Host
 
         # Create an empty array for storing computers that we can ping.
@@ -73,9 +74,15 @@ function Get-ShareInfo2
         # Clear the screen.
         Clear-Host
 
+        $CollectedData = @()
+
         # Loop through the all online computers.
         foreach ($OnlineComputer in $OnlineComputers) {
-            Invoke-Command -ComputerName $OnlineComputer -ArgumentList $ConsoleOutput, $FilePath -ScriptBlock {
+
+            
+
+            # Invoke a script block on every reachable computer.
+            $Data = Invoke-Command -ComputerName $OnlineComputer -ArgumentList $ConsoleOutput, $FilePath -ScriptBlock {
                 Param($ConsoleOutput, $FilePath)
 
                 $Object = Get-CimInstance -ClassName Win32_Share | Select-Object -Property Name,Path,Description,Status,AllowMaximum
@@ -93,23 +100,25 @@ function Get-ShareInfo2
                         "Status"       = $Object.Status[$i]
                         "AllowMaximum" = $Object.AllowMaximum[$i]
                     }
-
                     # Create our custom PSObject.
                     $CustomObject = New-Object -TypeName PSObject -Property $Properties
 
                     $ShareInfo += , $CustomObject
                 }
 
-                # Print to the console.
-                if ($ConsoleOutput) {
-                    Write-Host "$(HOSTNAME.EXE)" -ForegroundColor Green
-                    $ShareInfo | Format-Table
-                }
-                # Write to the file.
-                else {
-                    $ShareInfo | Format-Table | Out-File -FilePath $FilePath
-                }
+                return $ShareInfo | Format-Table | Out-String
             }
+
+            $CollectedData += , $Data
+        }
+
+        # Print to the console.
+        if ($ConsoleOutput) {
+            $CollectedData
+        }
+        # Write to the file.
+        else {
+            $CollectedData | Out-File -FilePath $FilePath
         }
     }
 
@@ -133,4 +142,4 @@ function Get-ShareInfo2
     }
 }
 
-Get-ShareInfo2 -Computers WIN-DC-001 ,WIN-FS-001,WIN-HV-001 -ConsoleOutput:$false
+Get-ShareInfo2 -Computers WIN-DC-001 ,WIN-FS-001,WIN-HV-001,SRV1,SRV2
