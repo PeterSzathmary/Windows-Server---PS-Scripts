@@ -58,6 +58,8 @@ function Get-ShareInfo2
 
         # Loop through the string array, that was given to us.
         foreach ($Computer in $Computers) {
+            Write-Host "Checking connection to $($Computer)..."
+
             # If the ping is successful, add the computer to the online computers array.
             if (Test-Connection -Count 1 -Quiet -ComputerName $Computer) {
                 $OnlineComputers += , $Computer
@@ -66,6 +68,8 @@ function Get-ShareInfo2
             else {
                 $OfflineComputers += , $Computer
             }
+
+            Clear-Host
         }
     }
 
@@ -78,9 +82,8 @@ function Get-ShareInfo2
 
         # Loop through the all online computers.
         foreach ($OnlineComputer in $OnlineComputers) {
-
+            Write-Host "Collecting information from computer: $($OnlineComputer)" -ForegroundColor Yellow
             
-
             # Invoke a script block on every reachable computer.
             $Data = Invoke-Command -ComputerName $OnlineComputer -ArgumentList $ConsoleOutput, $FilePath -ScriptBlock {
                 Param($ConsoleOutput, $FilePath)
@@ -106,11 +109,14 @@ function Get-ShareInfo2
                     $ShareInfo += , $CustomObject
                 }
 
-                return $ShareInfo | Format-Table | Out-String
+                return ($ShareInfo | Format-Table | Out-String).Trim()
             }
 
             $CollectedData += , $Data
+            $CollectedData += , "`n"
         }
+
+        Clear-Host
 
         # Print to the console.
         if ($ConsoleOutput) {
@@ -131,7 +137,7 @@ function Get-ShareInfo2
         # When we were writing to a file.
         else {
             # Print the file location.
-            Write-Host "File is at the location: $FilePath" -ForegroundColor Yellow -NoNewline
+            Write-Host "File is at the location: $FilePath" -ForegroundColor Yellow
         }
 
         # Print all computers that we couldn't reach.
@@ -141,5 +147,3 @@ function Get-ShareInfo2
         }
     }
 }
-
-Get-ShareInfo2 -Computers WIN-DC-001 ,WIN-FS-001,WIN-HV-001,SRV1,SRV2
