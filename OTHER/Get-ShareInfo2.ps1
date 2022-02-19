@@ -1,12 +1,13 @@
 ﻿<#
 .Synopsis
-   Short description
+   Get the share information from the computer.
 .DESCRIPTION
-   Long description
+   Get the share information from the computers provided. The script will get share information only
+   from the computers that are in the domain and are reachable.
 .EXAMPLE
-   Example of how to use this cmdlet
+   Get-ShareInfo2 -Computers WIN-DC-001,WIN-FS-001,WIN-HV-001 -ConsoleOutput
 .EXAMPLE
-   Another example of how to use this cmdlet
+   Get-ShareInfo2 -FilePath "C:\ShareInformation.txt"
 #>
 function Get-ShareInfo2
 {
