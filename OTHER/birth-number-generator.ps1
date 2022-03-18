@@ -31,7 +31,10 @@ if ($args.Length -eq 4) {
 
                     for ($i = 0; $i -lt 9999; $i++) {
                         if (($bn + $i.ToString().PadLeft(4, '0')) % 11 -eq 0) {
-                            Write-Host $($bn + "/" + $i.ToString().PadLeft(4, '0'))
+                            Write-Host "$($bn + "/" + $i.ToString().PadLeft(4, '0'))`t" -NoNewline
+                            if ($i % 6 -eq 0) {
+                                Write-Host
+                            }
                         }
                     }
                 } else {
