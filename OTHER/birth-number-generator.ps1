@@ -32,7 +32,9 @@ if ($args.Length -eq 4) {
                     for ($i = 0; $i -lt 9999; $i++) {
                         if (($bn + $i.ToString().PadLeft(4, '0')) % 11 -eq 0) {
                             Write-Host "$($bn + "/" + $i.ToString().PadLeft(4, '0'))`t" -NoNewline
-                            if ($i % 6 -eq 0) {
+                            # Print as many birth numbers in row as possible.
+                            # Get the width of the console and divide it with the total length of the birth number + `t, which is 16 characters.
+                            if ($i % [Math]::Floor([decimal]($Host.UI.RawUI.WindowSize.Width/16)) -eq 0) {
                                 Write-Host
                             }
                         }
